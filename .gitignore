@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE configurations
+.vscode/
+.idea/
+
+# Environment variables & secrets
+.env
+
+# Local database & prompt cache
+database/retailpulse.db
+database/llm_cache.json
+
+# Local run logs
+logs/*.log
+logs/
+
+# Generated outputs
+outputs/
+
