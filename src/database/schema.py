@@ -67,6 +67,36 @@ CREATE TABLE IF NOT EXISTS purchase_orders (
 );
 """
 
+CREATE_WAREHOUSE_LOCATIONS_TABLE = """
+CREATE TABLE IF NOT EXISTS warehouse_locations (
+    location_id TEXT PRIMARY KEY,
+    zone TEXT, -- Dry | Cold
+    rack TEXT,
+    shelf TEXT,
+    capacity INTEGER,
+    occupied INTEGER,
+    allowed_category TEXT
+);
+"""
+
+CREATE_INVENTORY_TABLE = """
+CREATE TABLE IF NOT EXISTS inventory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    transaction_id TEXT,
+    sku TEXT,
+    quantity INTEGER,
+    rack TEXT,
+    shelf TEXT,
+    expiry_date TEXT,
+    batch_number TEXT,
+    supplier_name TEXT,
+    status TEXT, -- ACTIVE | EXPIRED | HOLD
+    zone TEXT,
+    category TEXT,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+"""
+
 def initialize_database(conn):
     """
     Initialize all database tables inside the current SQLite connection.
@@ -78,4 +108,7 @@ def initialize_database(conn):
     cursor.execute(CREATE_SHIPMENTS_TABLE)
     cursor.execute(CREATE_AUDIT_LOGS_TABLE)
     cursor.execute(CREATE_PURCHASE_ORDERS_TABLE)
+    cursor.execute(CREATE_WAREHOUSE_LOCATIONS_TABLE)
+    cursor.execute(CREATE_INVENTORY_TABLE)
     conn.commit()
+

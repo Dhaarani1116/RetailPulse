@@ -1,5 +1,55 @@
-from pydantic import BaseModel
-from typing import List, Optional, Any
+from enum import Enum
+from pydantic import BaseModel, Field, field_validator
+from typing import List, Optional, Any, Dict
+from datetime import datetime
+
+class LogLevel(str, Enum):
+    INFO = "info"
+    SUCCESS = "success"
+    WARNING = "warning"
+    ERROR = "error"
+
+class MissionLogEntry(BaseModel):
+    timestamp: datetime = Field(default_factory=lambda: datetime.now().astimezone())
+    level: LogLevel
+    message: str
+
+class AgentStatus(str, Enum):
+    WAITING = "WAITING"
+    ACTIVE = "ACTIVE"
+    COMPLETE = "COMPLETE"
+    SKIPPED = "SKIPPED"
+    RUNNING = "RUNNING"
+    INFO = "INFO"
+    SUCCESS = "SUCCESS"
+    WARNING = "WARNING"
+    FAILED = "FAILED"
+    WAITING_APPROVAL = "WAITING_APPROVAL"
+
+class AgentStep(BaseModel):
+    transaction_id: str
+    agent: str
+    status: AgentStatus
+    current_activity: str = ""
+    metrics: Dict[str, int | float | str] = Field(default_factory=dict)
+    mission_log: List[MissionLogEntry] = Field(default_factory=list)
+    table_data: Optional[List[Dict[str, Any]]] = None
+    progress: float = 0.0
+
+    @field_validator("progress")
+    @classmethod
+    def validate_progress(cls, v: float) -> float:
+        if not (0.0 <= v <= 1.0):
+            # Clip value to avoid strict crashes in validation from rounding errors
+            return max(0.0, min(1.0, v))
+        return v
+
+    def add_log(self, level: LogLevel, message: str):
+        self.mission_log.append(MissionLogEntry(level=level, message=message))
+        self.mission_log = self.mission_log[-20:]
+
+
+
 
 class RawShipmentItem(BaseModel):
     raw_name: str
