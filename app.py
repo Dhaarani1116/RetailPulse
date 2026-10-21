@@ -16,6 +16,10 @@ import config
 from src.database.sqlite import seed_database, get_connection
 from src.pipeline_runner import PipelineRunner, AgentStatus, AgentStep
 
+# Auto-seed SQLite master database if newly deployed or empty
+if not config.DB_PATH.exists() or config.DB_PATH.stat().st_size == 0:
+    seed_database()
+
 # Set page layout and config
 st.set_page_config(
     page_title="RetailPulse AI Operations Center",

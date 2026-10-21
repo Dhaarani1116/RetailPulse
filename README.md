@@ -362,6 +362,27 @@ python test_pipeline.py
 
 ---
 
+## ☁️ Cloud Deployment (Streamlit Community Cloud)
+
+RetailPulse can be deployed directly to **Streamlit Community Cloud** with one click:
+
+1. **Push Repository to GitHub**:
+   Ensure all changes and `requirements.txt` are pushed to your `main` branch.
+2. **Connect to Streamlit Cloud**:
+   Go to [share.streamlit.io](https://share.streamlit.io) and click **"New App"**.
+   - **Repository:** `Dhaarani1116/RetailPulse`
+   - **Branch:** `main`
+   - **Main file path:** `app.py`
+3. **Configure Environment Secrets**:
+   Under **Advanced Settings > Secrets**, add your Gemini API key:
+   ```toml
+   GEMINI_API_KEY = "your_actual_gemini_api_key_here"
+   ```
+4. **Deploy**:
+   Click **Deploy**. Streamlit Cloud will automatically build and host the live Control Room with persistent WebSocket streaming and deliverable document generation.
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the `LICENSE` file for details.
