@@ -65,24 +65,45 @@ class IntakeOrchestrator:
         except StopIteration as e:
             post_results = e.value
 
+        def to_dict(obj, default=None):
+            if obj is None:
+                return default if default is not None else {}
+            if hasattr(obj, "dict"):
+                return obj.dict()
+            if isinstance(obj, dict):
+                return obj
+            return default if default is not None else {}
+
         # Standard return map mapping new variables to deprecated keys for backward testing compatibility
         print(f"[Intake Pipeline] Ingest run finished. Shipment ID: {transaction_id}")
         
+        floor_data = to_dict(post_results.get("floor") if post_results else None, {"pdf_path": "", "task_count": 0, "tasks": []}) if approved else {"pdf_path": "", "task_count": 0, "tasks": []}
+        procurement_data = to_dict(post_results.get("procurement") if post_results else None, {"po_path": None, "dispute_email_path": None, "notice_path": None}) if approved else {"po_path": None, "dispute_email_path": None, "notice_path": None}
+        manager_data = to_dict(post_results.get("executive") if post_results else None, {
+            "pdf_path": "",
+            "accepted_items_count": 0,
+            "rejected_items_count": 0,
+            "pending_items_count": 0,
+            "total_value": 0.0,
+            "supplier_score": 0.0,
+            "executive_summary": "Shipment Rejected."
+        }) if approved else {
+            "pdf_path": "",
+            "accepted_items_count": 0,
+            "rejected_items_count": 0,
+            "pending_items_count": 0,
+            "total_value": 0.0,
+            "supplier_score": 0.0,
+            "executive_summary": "Shipment Rejected."
+        }
+
         return {
             "shipment_id": transaction_id,
-            "receiving": pre_results["receiving"].dict(),
-            "sku": pre_results["sku"].dict(),
-            "audit": pre_results["audit"].dict(),
-            "decision": pre_results["decision"].dict(),
-            "floor": post_results.get("floor").dict() if approved else {"pdf_path": "", "task_count": 0, "tasks": []},
-            "procurement": post_results.get("procurement").dict() if approved else {"po_path": None, "dispute_email_path": None, "notice_path": None},
-            "manager": post_results.get("executive").dict() if approved else {
-                "pdf_path": "",
-                "accepted_items_count": 0,
-                "rejected_items_count": 0,
-                "pending_items_count": 0,
-                "total_value": 0.0,
-                "supplier_score": 0.0,
-                "executive_summary": "Shipment Rejected."
-            }
+            "receiving": to_dict(pre_results.get("receiving")),
+            "sku": to_dict(pre_results.get("sku")),
+            "audit": to_dict(pre_results.get("audit")),
+            "decision": to_dict(pre_results.get("decision")),
+            "floor": floor_data,
+            "procurement": procurement_data,
+            "manager": manager_data
         }
