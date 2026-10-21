@@ -1,5 +1,11 @@
 # 🧠 RetailPulse: Enterprise Autonomous Warehouse Control Room
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://retailpulse-lhuhjkm9tpbcd9gkfu2zdg.streamlit.app/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+> 🌐 **Live Deployed Application:** **[https://retailpulse-lhuhjkm9tpbcd9gkfu2zdg.streamlit.app/](https://retailpulse-lhuhjkm9tpbcd9gkfu2zdg.streamlit.app/)**
+>
 > **An Autonomous 13-Agent AI Workforce Powered by Google Gemini & SQLite Source-of-Truth Architecture**
 
 RetailPulse is an enterprise-grade autonomous warehouse operations center that transforms multi-format supplier invoice intake into a live, compute-driven decision and execution pipeline. Built around a NASA-inspired Control Room UI, RetailPulse deploys **13 specialized AI reasoning agents** working in concert to handle document extraction, catalog reconciliation, contract compliance auditing, automated risk scoring, 3D storage allocation, floor picker dispatch, replenishment purchasing, warehouse safety health tracking, executive reporting, and ERP integration.
